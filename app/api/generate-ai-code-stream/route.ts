@@ -1311,10 +1311,6 @@ It's better to have 3 complete files than 10 incomplete files.`
           // We use XML tags for package detection instead
         };
         
-        // Add temperature for non-reasoning models
-        if (!model.startsWith('openai/gpt-5')) {
-          streamOptions.temperature = 0.7;
-        }
         
         // Add reasoning effort for GPT-5 models
         if (isOpenAI) {
@@ -1760,9 +1756,7 @@ Provide the complete file content without any truncation. Include all necessary 
                     },
                     { role: 'user', content: completionPrompt }
                   ],
-                  temperature: model.startsWith('openai/gpt-5') ? undefined : appConfig.ai.defaultTemperature
-                });
-                
+                });                
                 // Get the full text from the stream
                 let completedContent = '';
                 for await (const chunk of completionResult.textStream) {
