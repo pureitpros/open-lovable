@@ -1376,7 +1376,7 @@ It's better to have 3 complete files than 10 incomplete files.`
             }
           }
         }
-        if (result?.fullStream) { (async () => { try { for await (const part of result.fullStream) { console.log(`[generate-ai-code-stream] [DEBUG-CHUNK-TYPE] ${part?.type}`); if (part?.type === 'finish' || part?.type === 'finish-step') { console.log(`[generate-ai-code-stream] [DEBUG-FINISH] finishReason=${JSON.stringify(part?.finishReason)} usage=${JSON.stringify(part?.usage)}`); } } } catch (debugStreamError) { console.log('[generate-ai-code-stream] [DEBUG-CHUNK-TYPE] error reading fullStream:', debugStreamError); } })(); }
+        if (result?.fullStream) { (async () => { try { for await (const part of result.fullStream) { console.log(`[generate-ai-code-stream] [DEBUG-CHUNK-TYPE] ${part?.type}`); if (part?.type === 'finish' || part?.type === 'finish-step') { console.log(`[generate-ai-code-stream] [DEBUG-FINISH] finishReason=${JSON.stringify((part as any)?.finishReason)} usage=${JSON.stringify((part as any)?.usage ?? (part as any)?.totalUsage)}`); } } } catch (debugStreamError) { console.log('[generate-ai-code-stream] [DEBUG-CHUNK-TYPE] error reading fullStream:', debugStreamError); } })(); }
         
         // Stream the response and parse in real-time
         let generatedCode = '';
