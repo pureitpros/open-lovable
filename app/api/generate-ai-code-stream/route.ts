@@ -1376,6 +1376,7 @@ It's better to have 3 complete files than 10 incomplete files.`
             }
           }
         }
+        if (result?.fullStream) { (async () => { try { for await (const part of result.fullStream) { console.log(`[generate-ai-code-stream] [DEBUG-CHUNK-TYPE] ${part?.type}`); } } catch (debugStreamError) { console.log('[generate-ai-code-stream] [DEBUG-CHUNK-TYPE] error reading fullStream:', debugStreamError); } })(); }
         
         // Stream the response and parse in real-time
         let generatedCode = '';
