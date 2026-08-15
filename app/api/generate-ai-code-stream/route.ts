@@ -590,10 +590,10 @@ ${conversationContext}
    - ✅ CORRECT: bg-white, text-black, bg-blue-500, bg-gray-100, text-gray-900
    - ❌ WRONG: bg-background, text-foreground, bg-primary, bg-muted, text-secondary
    - Use ONLY classes from the official Tailwind CSS documentation
-5. **FILE COUNT LIMITS**:
+${isEdit ? `5. **FILE COUNT LIMITS**:
    - Simple style/text change = 1 file ONLY
-   - New component = 2 files MAX (component + parent)
-   - If >3 files, YOU'RE DOING TOO MUCH
+      - New component = 2 files MAX (component + parent)
+         - If >3 files, YOU'RE DOING TOO MUCH` : ''}
 6. **DO NOT CREATE SVGs FROM SCRATCH**:
    - NEVER generate custom SVG code unless explicitly asked
    - Use existing icon libraries (lucide-react, heroicons, etc.)
@@ -1376,7 +1376,7 @@ It's better to have 3 complete files than 10 incomplete files.`
             }
           }
         }
-        if (result?.fullStream) { (async () => { try { for await (const part of result.fullStream) { console.log(`[generate-ai-code-stream] [DEBUG-CHUNK-TYPE] ${part?.type}`); } } catch (debugStreamError) { console.log('[generate-ai-code-stream] [DEBUG-CHUNK-TYPE] error reading fullStream:', debugStreamError); } })(); }
+        if (result?.fullStream) { (async () => { try { for await (const part of result.fullStream) { console.log(`[generate-ai-code-stream] [DEBUG-CHUNK-TYPE] ${part?.type}`); if (part?.type === 'finish' || part?.type === 'finish-step') { console.log(`[generate-ai-code-stream] [DEBUG-FINISH] finishReason=${JSON.stringify(part?.finishReason)} usage=${JSON.stringify(part?.usage)}`); } } } catch (debugStreamError) { console.log('[generate-ai-code-stream] [DEBUG-CHUNK-TYPE] error reading fullStream:', debugStreamError); } })(); }
         
         // Stream the response and parse in real-time
         let generatedCode = '';
