@@ -454,9 +454,7 @@ export async function POST(request: NextRequest) {
           // Use streaming package installation
           try {
             // Construct the API URL properly for both dev and production
-            const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
-            const host = req.headers.get('host') || 'localhost:3000';
-            const apiUrl = `${protocol}://${host}/api/install-packages`;
+            const apiUrl = 'http://localhost:3000/api/install-packages';
 
             const installResponse = await fetch(apiUrl, {
               method: 'POST',
