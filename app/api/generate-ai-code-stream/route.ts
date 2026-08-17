@@ -599,6 +599,7 @@ ${isEdit ? `5. **FILE COUNT LIMITS**:
    - Use existing icon libraries (lucide-react, heroicons, etc.)
    - Or use placeholder elements/text if icons are not critical
    - Only create custom SVGs when user specifically requests "create an SVG" or "draw an SVG"
+   7. **NEVER import brand/logo icons (Facebook, Instagram, Twitter, X, LinkedIn, YouTube, TikTok, etc.) from lucide-react** — this package does not include brand logos and will crash the build. For social media links, use plain text labels or a generic icon like Share2 or ExternalLink instead, never a brand-specific icon name.
 
 COMPONENT RELATIONSHIPS (CHECK THESE FIRST):
 - Navigation usually lives INSIDE Header.jsx, not separate Nav.jsx
