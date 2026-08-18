@@ -17,7 +17,7 @@ export async function POST() {
 
       // Create zip file in sandbox using standard commands
       const zipResult = await global.activeSandboxProvider.runCommand(
-              'zip -r /tmp/project.zip . -x node_modules/* .git/* .next/* dist/* build/* *.log'
+              'zip -r -0 /tmp/project.zip . -x node_modules/* .git/* .next/* dist/* build/* *.log'
             );
 
       if (zipResult.exitCode !== 0) {
