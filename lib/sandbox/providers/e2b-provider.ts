@@ -70,40 +70,52 @@ export class E2BProvider extends SandboxProvider {
     }
   }
 
-  async runCommand(command: string): Promise<CommandResult> {
-    if (!this.sandbox) {
-      throw new Error('No active sandbox');
-    }
-
-    
-    const result = await this.sandbox.runCode(`
-      import subprocess
-      import os
-
-      os.chdir('/home/user/app')
-      result = subprocess.run(${JSON.stringify(command.split(' '))}, 
-                            capture_output=True, 
-                            text=True, 
-                            shell=False)
-
-      print("STDOUT:")
-      print(result.stdout)
-      if result.stderr:
-          print("\\nSTDERR:")
-          print(result.stderr)
-      print(f"\\nReturn code: {result.returncode}")
-    `);
-    
-    const output = result.logs.stdout.join('\n');
-    const stderr = result.logs.stderr.join('\n');
-    
-    return {
-      stdout: output,
-      stderr,
-      exitCode: result.error ? 1 : 0,
-      success: !result.error
-    };
+async runCommand(command: string): Promise<CommandResult> {
+  if (!this.sandbox) {
+    throw new Error('No active sandbox');
   }
+
+
+  const result = await this.sandbox.runCode(`
+  import subprocess
+  import os
+  import json
+
+  os.chdir('/home/user/app')
+  result = subprocess.run(${JSON.stringify(command.split(' '))},
+  capture_output=True,
+  text=True,
+  shell=False)
+
+  print(json.dumps({"stdout": result.stdout, "stderr": result.stderr, "returncode": result.returncode}))
+  `);
+
+  const rawOutput = result.logs.stdout.join('\n');
+
+  let stdout = '';
+  let stderr = '';
+  let exitCode = result.error ? 1 : 0;
+
+  try {
+    const parsed = JSON.parse(rawOutput);
+    stdout = parsed.stdout ?? '';
+    stderr = parsed.stderr ?? '';
+    exitCode = typeof parsed.returncode === 'number' ? parsed.returncode : exitCode;
+  } catch (parseError) {
+    // Fallback: if the wrapper's JSON print didn't run (e.g. sandbox execution
+    // error before we got there), surface the raw output rather than losing it.
+    stdout = rawOutput;
+    stderr = result.logs.stderr.join('\n');
+  }
+
+  return {
+    stdout,
+    stderr,
+    exitCode,
+    success: exitCode === 0 && !result.error
+  };
+}
+  
 
   async writeFile(path: string, content: string): Promise<void> {
     if (!this.sandbox) {
